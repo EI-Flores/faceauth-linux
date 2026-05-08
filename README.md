@@ -1,4 +1,8 @@
+<div align="center">
+
 # faceauth-linux
+
+Local face authentication prototype for Linux using facial landmarks, liveness checks and future PAM-ready verification.
 
 ![Status](https://img.shields.io/badge/status-early%20prototype-orange)
 ![Platform](https://img.shields.io/badge/platform-Linux-blue)
@@ -6,7 +10,7 @@
 ![Language](https://img.shields.io/badge/language-Python-yellow)
 ![Security](https://img.shields.io/badge/security-password%20fallback%20required-red)
 
-Local face authentication prototype for Linux using facial landmarks, liveness checks and future PAM-ready verification.
+</div>
 
 > This project is experimental. It is not intended to replace passwords completely.
 
@@ -18,23 +22,33 @@ Local face authentication prototype for Linux using facial landmarks, liveness c
 
 The initial target is Fedora Linux, but the project is designed to remain generic enough for other Linux distributions.
 
-The project is being developed incrementally:
-
-1. camera access;
-2. facial landmark detection;
-3. basic head pose estimation;
-4. liveness challenges;
-5. face enrollment;
-6. face verification;
-7. optional PAM integration.
+The project is being developed incrementally, starting with camera access and facial landmarks before moving into liveness checks, face verification and optional PAM integration.
 
 ---
 
 ## Current status
 
+| Area | Status |
+|---|---|
+| Project scaffold | Done |
+| Python virtual environment | Done |
+| Camera access probe | Done |
+| MediaPipe Face Landmarker | Done |
+| Facial landmarks | Done |
+| Blendshapes | Done |
+| Head pose detection | Pending |
+| Liveness challenge | Pending |
+| Face enrollment | Pending |
+| Face verification | Pending |
+| PAM integration | Pending |
+
 Current milestone:
 
 **v0.1 - Camera and landmarks**
+
+---
+
+## Current capabilities
 
 Implemented:
 
@@ -109,7 +123,75 @@ Face verification
 CLI result
   ↓
 Future PAM integration
+```
 
+---
+
+## Development setup
+
+Create and activate a local Python virtual environment:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+```
+
+Install dependencies:
+
+```bash
+python -m pip install -r requirements-dev.txt
+```
+
+Do not install Python dependencies globally.
+
+Avoid:
+
+```bash
+sudo pip install ...
+```
+
+---
+
+## Camera probe
+
+Run from the repository root:
+
+```bash
+PYTHONPATH=src python -m faceauth.camera_probe
+```
+
+Expected output:
+
+```text
+Camera opened successfully
+Resolution: 640x480
+Frame captured: OK
+```
+
+---
+
+## Face landmarks probe
+
+The MediaPipe Face Landmarker model is required locally:
+
+```text
+models/face_landmarker.task
+```
+
+This file is intentionally ignored by Git.
+
+Run:
+
+```bash
+PYTHONPATH=src python -m faceauth.landmarks_probe
+```
+
+Example output:
+
+```text
+Face detected | landmarks=478 | blendshapes=52 | frame=150
+RESULT: OK - face detected in 87/150 frames
 ```
 
 ---
@@ -124,3 +206,61 @@ Main pages:
 - Fedora Setup
 - Development Workflow
 - Security Model
+
+---
+
+## Roadmap
+
+### v0.1 - Camera and landmarks
+
+- [x] Open webcam
+- [x] Capture frame
+- [x] Detect face landmarks
+- [x] Enable blendshape output
+- [ ] Estimate basic head direction
+
+### v0.2 - Liveness challenge
+
+- [ ] Look center
+- [ ] Look left
+- [ ] Look right
+- [ ] Validate movement sequence
+
+### v0.3 - Face enrollment
+
+- [ ] Capture multiple samples
+- [ ] Generate local face template
+- [ ] Avoid raw image storage
+
+### v0.4 - Face verification
+
+- [ ] Compare current face with enrolled template
+- [ ] Return CLI exit code
+- [ ] Add configurable threshold
+
+### v0.5 - PAM proof of concept
+
+- [ ] Integrate with sudo only
+- [ ] Keep password fallback
+- [ ] Document rollback steps
+
+---
+
+## Security principles
+
+This project follows these principles:
+
+- do not store raw face images by default;
+- keep password fallback mandatory;
+- avoid root privileges during development;
+- do not modify PAM until CLI verification is stable;
+- use timeouts and attempt limits;
+- log events, not biometric data;
+- keep biometric templates local;
+- document all security assumptions.
+
+---
+
+## License
+
+See `LICENSE`.
