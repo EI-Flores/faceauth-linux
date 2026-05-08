@@ -109,3 +109,18 @@ Face verification
 CLI result
   ↓
 Future PAM integration
+
+```
+
+---
+
+## Documentation
+
+Project documentation is available in the GitHub Wiki.
+
+Main pages:
+
+- Home
+- Fedora Setup
+- Development Workflow
+- Security Model
